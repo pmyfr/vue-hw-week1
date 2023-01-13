@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+ 
+</head>
+
+<body>
+
+    <div id="app">
+        <div class="container">
+          <div class="row py-3">
+            <div class="col-md-6">
+              <h2>產品列表</h2>
+              <table class="table table-hover mt-4">
+                <thead>
+                  <tr>
+                    <th width="150">產品名稱</th>
+                    <th width="120">
+                      原價
+                    </th>
+                    <th width="120">
+                      售價
+                    </th>
+                    <th width="150">
+                      是否啟用
+                    </th>
+                    <th width="120">
+                      查看細節
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item) in products" v-bind:key="item.id"> <!--Vue下跑forEach迴圈 -->
+                    <td width="150">{{ item.title }}</td>  <!--利用{{}}進行資料渲染 -->
+                    <td width="120">
+                      {{ item.origin_price  }}
+                    </td>
+                    <td width="120">
+                      {{ item.price }}
+                    </td>
+                    <td width="150">
+                      <span v-if="item.is_enabled" class="text-success">啟用</span> <!--Vue if判斷式:如果item的is.enable屬性有值，則渲染出"啟用"字樣，否則渲染出"非啟用"字樣-->
+                      <span v-else>未啟用</span>
+                    </td>
+                    <td width="120">
+                      <button type="button" class="btn btn-primary" v-on:click="tempProduct = item">查看細節</button><!--Vue事件監聽:如果點擊class為btn btn-primaryitem的按鈕，tempProduct屬性值就為item的值-->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>目前有 <span>{{ products.length }}</span> 項產品</p>
+            </div>
+            <div class="col-md-6">
+              <h2>單一產品細節</h2>
+              <template v-if="tempProduct.title">  <!--Vue if判斷式:如果item的title屬性有值，則渲染出"啟用"字樣，否則渲染出"非啟用"字樣-->
+                <div class="card mb-3">
+                  <img v-bind:src="tempProduct.imageUrl" class="card-img-top primary-image" alt="主圖"><!--綁定img的src屬性並提供圖片來源-->
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      {{ tempProduct.title }}
+                      <span class="badge bg-primary ms-2">{{ tempProduct.category }}</span>
+                    </h5>
+                    <p class="card-text">商品描述：{{ tempProduct.description }}</p>
+                    <p class="card-text">商品內容：{{ tempProduct.content }}</p>
+                    <div class="d-flex">
+                      <p class="card-text me-2">{{ tempProduct.price }}</p>
+                      <p class="card-text text-secondary"><del>{{ tempProduct.origin_price }}</del></p>
+                      元 / {{ tempProduct.unit }}
+                    </div>
+                  </div>
+                </div>
+                <span v-for="(image, id) in tempProduct.imagesUrl" v-bind:key="id">
+                  <img v-if="image" v-bind:src="image" alt="" class="images m-2">
+                </span>
+              </template>
+              <p v-else class="text-secondary">請選擇一個商品查看</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    <script type="module" src="/all.js">
+      <!-- // Vue以ESM匯入，須標明它的type為module -->
+    </script>
+    </body>
+    </html>
